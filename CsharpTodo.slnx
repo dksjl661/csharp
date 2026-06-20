@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="CsharpTodo.Api/CsharpTodo.Api.csproj" />
+  <Project Path="CsharpTodo.Tests/CsharpTodo.Tests.csproj" />
+</Solution>
