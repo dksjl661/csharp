@@ -1,12 +1,33 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CsharpTodo.Tests;
 
 public class TodoApiTests(TodoApiFactory factory) : IClassFixture<TodoApiFactory>
 {
+    [Fact]
+    public void Todo_routes_are_served_by_todos_controller()
+    {
+        using var scope = factory.Services.CreateScope();
+        var descriptions = scope.ServiceProvider
+            .GetRequiredService<IApiDescriptionGroupCollectionProvider>()
+            .ApiDescriptionGroups
+            .Items
+            .SelectMany(group => group.Items);
+
+        var route = Assert.Single(descriptions, description =>
+            description.HttpMethod == HttpMethod.Get.Method
+            && string.Equals(description.RelativePath?.TrimEnd('/'), "api/todos", StringComparison.OrdinalIgnoreCase));
+
+        var action = Assert.IsType<ControllerActionDescriptor>(route.ActionDescriptor);
+        Assert.Equal("TodosController", action.ControllerTypeInfo.Name);
+    }
+
     [Fact]
     public async Task Get_todos_returns_seeded_items()
     {
