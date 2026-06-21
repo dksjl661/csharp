@@ -1,6 +1,6 @@
-namespace CsharpTodo.Api.Contracts;
+namespace CsharpTodo.Api.Application.Todos;
 
-public sealed record TodoRequest(string? Title, string? Description, bool IsCompleted)
+public sealed record TodoInput(string? Title, string? Description, bool IsCompleted, int? LabelId)
 {
     public bool IsValid(out string? error)
     {

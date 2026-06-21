@@ -1,84 +1,64 @@
-using CsharpTodo.Api.Contracts;
-using CsharpTodo.Api.Data;
-using CsharpTodo.Api.Models;
+using CsharpTodo.Api.Application.Todos;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CsharpTodo.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TodosController(TodoDbContext database) : ControllerBase
+public class TodosController(
+    GetTodosQueryHandler getTodos,
+    GetTodoQueryHandler getTodo,
+    CreateTodoCommandHandler createTodo,
+    UpdateTodoCommandHandler updateTodo,
+    DeleteTodoCommandHandler deleteTodo) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<TaskItem>>> GetTodos()
+    public async Task<ActionResult<IReadOnlyList<TodoDto>>> GetTodos(CancellationToken cancellationToken)
     {
-        return Ok(await database.Todos.OrderBy(todo => todo.Id).ToListAsync());
+        return Ok(await getTodos.HandleAsync(cancellationToken));
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<TaskItem>> GetTodo(int id)
+    public async Task<ActionResult<TodoDto>> GetTodo(int id, CancellationToken cancellationToken)
     {
-        var todo = await database.Todos.FindAsync(id);
+        var todo = await getTodo.HandleAsync(id, cancellationToken);
         return todo is null ? NotFound() : Ok(todo);
     }
 
     [HttpPost]
-    public async Task<ActionResult<TaskItem>> CreateTodo(TodoRequest request)
+    public async Task<ActionResult<TodoDto>> CreateTodo(TodoInput input, CancellationToken cancellationToken)
     {
-        if (!request.IsValid(out var error))
+        if (!input.IsValid(out var error))
         {
             return BadRequest(new { error });
         }
 
-        var todo = new TaskItem
-        {
-            Title = request.Title!.Trim(),
-            Description = request.Description,
-            IsCompleted = request.IsCompleted,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        database.Todos.Add(todo);
-        await database.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetTodo), new { id = todo.Id }, todo);
+        var result = await createTodo.HandleAsync(input, cancellationToken);
+        return result.Todo is null
+            ? BadRequest(new { error = result.Error })
+            : CreatedAtAction(nameof(GetTodo), new { id = result.Todo.Id }, result.Todo);
     }
 
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<TaskItem>> UpdateTodo(int id, TodoRequest request)
+    public async Task<ActionResult<TodoDto>> UpdateTodo(int id, TodoInput input, CancellationToken cancellationToken)
     {
-        if (!request.IsValid(out var error))
+        if (!input.IsValid(out var error))
         {
             return BadRequest(new { error });
         }
 
-        var todo = await database.Todos.FindAsync(id);
-        if (todo is null)
+        var result = await updateTodo.HandleAsync(id, input, cancellationToken);
+        if (result.NotFound)
         {
             return NotFound();
         }
 
-        todo.Title = request.Title!.Trim();
-        todo.Description = request.Description;
-        todo.IsCompleted = request.IsCompleted;
-        await database.SaveChangesAsync();
-
-        return Ok(todo);
+        return result.Todo is null ? BadRequest(new { error = result.Error }) : Ok(result.Todo);
     }
 
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteTodo(int id)
+    public async Task<IActionResult> DeleteTodo(int id, CancellationToken cancellationToken)
     {
-        var todo = await database.Todos.FindAsync(id);
-        if (todo is null)
-        {
-            return NotFound();
-        }
-
-        database.Todos.Remove(todo);
-        await database.SaveChangesAsync();
-
-        return NoContent();
+        return await deleteTodo.HandleAsync(id, cancellationToken) ? NoContent() : NotFound();
     }
 }

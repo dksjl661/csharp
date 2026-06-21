@@ -2,7 +2,6 @@ using CsharpTodo.Api.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -18,7 +17,6 @@ public sealed class TodoApiFactory : WebApplicationFactory<Program>
         builder.ConfigureServices(services =>
         {
             services.RemoveAll<DbContextOptions<TodoDbContext>>();
-            services.RemoveAll<IDbContextOptionsConfiguration<TodoDbContext>>();
 
             services.AddDbContext<TodoDbContext>(db =>
                 db.UseInMemoryDatabase(_databaseName));

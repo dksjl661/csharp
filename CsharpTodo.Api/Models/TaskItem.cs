@@ -11,4 +11,8 @@ public class TaskItem
     public bool IsCompleted { get; set; }
 
     public DateTime CreatedAt { get; set; }
+
+    public int? LabelId { get; set; }
+
+    public Label? Label { get; set; }
 }

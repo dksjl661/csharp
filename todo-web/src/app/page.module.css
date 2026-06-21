@@ -1,0 +1,50 @@
+.workspace { min-height: 100vh; padding: 32px clamp(20px, 5vw, 80px) 64px; background: radial-gradient(circle at 85% 7%, #f7de99 0 9%, transparent 25%), #edf1ea; }
+.hero { max-width: 1240px; margin: 0 auto 28px; display: flex; align-items: end; justify-content: space-between; gap: 32px; }
+.eyebrow, .kicker { color: #49645b; font-size: 11px; font-weight: 800; letter-spacing: .14em; margin: 0 0 12px; }
+.hero h1 { margin: 0; max-width: 680px; color: #18382d; font-family: "Iowan Old Style", Baskerville, Georgia, serif; font-size: clamp(48px, 7vw, 96px); font-weight: 400; letter-spacing: -.075em; line-height: .9; }
+.intro { max-width: 480px; margin: 20px 0 0; color: #537067; font-size: 18px; line-height: 1.45; }
+.progressCard { width: 230px; padding: 18px 20px; color: #f7f2e9; background: #18382d; box-shadow: 8px 8px 0 #d6b655; }
+.progressCard span, .progressCard small { display: block; color: #b9c8bb; font-size: 12px; letter-spacing: .04em; }
+.progressCard strong { display: block; margin: 3px 0 12px; font-family: Georgia, serif; font-size: 42px; font-weight: 400; }
+.progressTrack { height: 5px; margin-bottom: 10px; overflow: hidden; background: #46655a; }
+.progressTrack i { display: block; height: 100%; background: #f4cc50; transition: width .25s ease; }
+.board { max-width: 1240px; min-height: 560px; margin: 0 auto; display: grid; grid-template-columns: 220px 1fr; border: 1px solid #c9d3ca; background: #fbfbf6; box-shadow: 12px 14px 0 rgba(24, 56, 45, .09); }
+.sidebar { padding: 28px 18px; color: #dce6d9; background: #1d4034; }
+.brand { margin-bottom: 42px; color: #f3cf62; font-size: 14px; font-weight: 800; letter-spacing: .12em; }
+.sidebar nav { display: grid; gap: 5px; }
+.filter, .filterActive { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 10px 10px; border: 0; color: #bfd0c2; background: transparent; text-align: left; transition: background .18s ease, color .18s ease; }
+.filter span, .filterActive span { font-size: 12px; }
+.filter:hover { color: #fff; background: #31594a; }
+.filterActive { color: #173d31; background: #f4cc50; font-weight: 800; }
+.labelLegend { margin-top: 48px; display: grid; gap: 12px; font-size: 13px; }
+.labelLegend p { margin: 0 0 4px; color: #8fa89b; font-size: 11px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+.labelLegend div { display: flex; gap: 9px; align-items: center; }
+.labelLegend i { width: 8px; height: 8px; border-radius: 50%; }
+.content { padding: clamp(24px, 5vw, 56px); }
+.contentHeader { display: flex; align-items: start; justify-content: space-between; gap: 20px; margin-bottom: 28px; }
+.contentHeader h2 { margin: 0; color: #18382d; font-family: Georgia, serif; font-size: 38px; font-weight: 400; letter-spacing: -.04em; }
+.today { padding-top: 8px; color: #6a7d74; font-size: 13px; }
+.addForm { display: grid; grid-template-columns: minmax(0, 1fr) 150px auto; border: 1px solid #cbd4c8; background: #fffef9; }
+.titleField input, .labelSelect select { width: 100%; height: 54px; border: 0; outline: none; color: #18382d; background: transparent; }
+.titleField input { padding: 0 16px; font-size: 16px; }
+.labelSelect { border-left: 1px solid #d9dfd7; }
+.labelSelect select { padding: 0 12px; color: #537067; }
+.addButton { padding: 0 18px; border: 0; color: #fffdf6; background: #e5653d; font-weight: 800; transition: background .18s ease; }
+.addButton:hover:not(:disabled) { background: #c94f2d; }
+.addButton:disabled { cursor: wait; opacity: .65; }
+.todoList { margin: 22px 0 0; padding: 0; list-style: none; border-top: 1px solid #dbe2db; }
+.todo, .todoDone { min-height: 76px; display: grid; grid-template-columns: 28px minmax(0, 1fr) auto auto; align-items: center; gap: 15px; border-bottom: 1px solid #dbe2db; }
+.todoDone { opacity: .54; }
+.check { width: 20px; height: 20px; display: grid; place-items: center; border: 1.5px solid #719181; border-radius: 50%; color: #fff; background: transparent; font-size: 12px; font-weight: 900; }
+.todoDone .check { border-color: #2c6550; background: #2c6550; }
+.todoCopy { min-width: 0; display: grid; gap: 4px; }
+.todoCopy strong { overflow: hidden; color: #203a31; font-size: 15px; text-overflow: ellipsis; white-space: nowrap; }
+.todoDone .todoCopy strong { text-decoration: line-through; }
+.todoCopy span { overflow: hidden; color: #83938b; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+.labelPill, .noLabel { padding: 4px 8px; border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 800; white-space: nowrap; }
+.noLabel { border-color: #d4dbd5; color: #8e9d95; font-weight: 600; }
+.delete { padding: 7px 0 7px 10px; border: 0; color: #8d9c93; background: transparent; font-size: 12px; }
+.delete:hover { color: #bd3f2b; text-decoration: underline; }
+.error { margin: 16px 0 0; color: #a83425; font-size: 14px; }
+.status, .empty { padding: 32px 0; color: #6a7d74; }
+@media (max-width: 720px) { .workspace { padding: 20px; } .hero { align-items: start; flex-direction: column; } .progressCard { width: 100%; } .board { grid-template-columns: 1fr; } .sidebar { padding: 20px; } .brand, .labelLegend { margin-bottom: 20px; } .labelLegend { margin-top: 24px; } .sidebar nav { grid-template-columns: repeat(3, 1fr); } .filter, .filterActive { flex-direction: column; align-items: start; gap: 4px; } .content { padding: 24px 18px; } .addForm { grid-template-columns: 1fr auto; } .labelSelect { grid-row: 2; grid-column: span 2; border-top: 1px solid #d9dfd7; border-left: 0; } .addButton { grid-row: 1; } .todo, .todoDone { grid-template-columns: 24px minmax(0, 1fr) auto; gap: 10px; } .delete { display: none; } .labelPill, .noLabel { grid-column: 2; justify-self: start; margin-bottom: 12px; } }

@@ -42,6 +42,31 @@ public class TodoApiTests(TodoApiFactory factory) : IClassFixture<TodoApiFactory
     }
 
     [Fact]
+    public async Task Get_todos_includes_the_assigned_label()
+    {
+        using var client = factory.CreateClient();
+
+        var todos = await client.GetFromJsonAsync<List<TodoResponse>>("/api/todos");
+        var studyTodo = Assert.Single(todos!, todo => todo.Title == "Learn ASP.NET Core");
+
+        Assert.NotNull(studyTodo.Label);
+        Assert.Equal("Study", studyTodo.Label.Name);
+        Assert.Equal("#2563EB", studyTodo.Label.Color);
+    }
+
+    [Fact]
+    public async Task Get_labels_returns_seeded_labels()
+    {
+        using var client = factory.CreateClient();
+
+        var response = await client.GetAsync("/api/labels");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var labels = await response.Content.ReadFromJsonAsync<List<LabelResponse>>();
+        Assert.Contains(labels!, label => label.Name == "Work" && label.Color == "#F97316");
+    }
+
+    [Fact]
     public async Task Get_todo_returns_not_found_for_unknown_id()
     {
         using var client = factory.CreateClient();
@@ -128,5 +153,8 @@ public class TodoApiTests(TodoApiFactory factory) : IClassFixture<TodoApiFactory
         string Title,
         string? Description,
         bool IsCompleted,
-        DateTime CreatedAt);
+        DateTime CreatedAt,
+        LabelResponse? Label);
+
+    private sealed record LabelResponse(int Id, string Name, string? Description, string Color);
 }

@@ -1,4 +1,6 @@
 using CsharpTodo.Api.Data;
+using CsharpTodo.Api.Application.Labels;
+using CsharpTodo.Api.Application.Todos;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,16 @@ var connectionString = builder.Configuration.GetConnectionString("TodoDatabase")
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<TodoDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddScoped<GetTodosQueryHandler>();
+builder.Services.AddScoped<GetTodoQueryHandler>();
+builder.Services.AddScoped<CreateTodoCommandHandler>();
+builder.Services.AddScoped<UpdateTodoCommandHandler>();
+builder.Services.AddScoped<DeleteTodoCommandHandler>();
+builder.Services.AddScoped<GetLabelsQueryHandler>();
+builder.Services.AddCors(options => options.AddPolicy("Frontend", policy => policy
+    .WithOrigins(builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? ["http://localhost:3000"])
+    .AllowAnyHeader()
+    .AllowAnyMethod()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -25,6 +37,7 @@ await using (var scope = app.Services.CreateAsyncScope())
     await TodoDatabaseInitializer.InitializeAsync(database);
 }
 
+app.UseCors("Frontend");
 app.MapControllers();
 app.Run();
 

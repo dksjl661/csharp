@@ -1,0 +1,7 @@
+:root { color: #17211f; background: #edf1ea; }
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body { margin: 0; font-family: "Avenir Next", "Segoe UI", sans-serif; }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+.srOnly { clip: rect(0, 0, 0, 0); clip-path: inset(50%); height: 1px; overflow: hidden; position: absolute; white-space: nowrap; width: 1px; }
